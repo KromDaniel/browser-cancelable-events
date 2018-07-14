@@ -1,11 +1,28 @@
-import CancelledPromiseError from "./CancelledPromiseError";
-import { isFunction } from "./utils";
 
-interface ICancelablePromise<T> extends Promise<T> {
+// tslint:disable:max-classes-per-file
+export const isCancelledPromiseError = (err: Error) => {
+    return CancelledPromiseError.isCancelledPromiseError(err);
+};
+
+export interface ICancelablePromise<T> extends Promise<T> {
     cancel: () => void;
 }
 
+const errorSymbol = Symbol();
+class CancelledPromiseError extends Error {
+    public static isCancelledPromiseError(err: any): err is CancelledPromiseError {
+        return err[errorSymbol] === true;
+    }
+    private [errorSymbol] = true;
+    constructor(message: string = "Promise was cancelled") {
+        super(message);
+    }
+}
+
 export default class CancelableEvents {
+    public static isCancelledPromiseError = (err: Error) => {
+        return CancelledPromiseError.isCancelledPromiseError(err);
+    }
     private isDead: boolean = false;
     private timeouts: Set<number> = new Set();
     private intervals: Set<number> = new Set();
@@ -170,3 +187,7 @@ export default class CancelableEvents {
         }
     }
 }
+
+const isFunction = (t: any): t is () => void => {
+    return "function" === typeof t;
+};

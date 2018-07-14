@@ -8,7 +8,7 @@ const assert = require("assert");
 const {
     promisify
 } = require("util");
-const cancelable = require("../dist/index");
+const cancelable = require("../index");
 const setTimeoutPromise = promisify(setTimeout);
 
 const CancelableEvents = cancelable.default;

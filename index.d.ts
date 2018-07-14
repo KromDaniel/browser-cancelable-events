@@ -1,7 +1,9 @@
-interface ICancelablePromise<T> extends Promise<T> {
+export declare const isCancelledPromiseError: (err: Error) => boolean;
+export interface ICancelablePromise<T> extends Promise<T> {
     cancel: () => void;
 }
 export default class CancelableEvents {
+    static isCancelledPromiseError: (err: Error) => boolean;
     private isDead;
     private timeouts;
     private intervals;
@@ -69,4 +71,3 @@ export default class CancelableEvents {
     private createCancelIntervalCb;
     private assertIsDead;
 }
-export {};

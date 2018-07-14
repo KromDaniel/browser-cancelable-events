@@ -1,4 +1,14 @@
 "use strict";
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     return new (P || (P = Promise))(function (resolve, reject) {
         function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
@@ -34,12 +44,28 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-var CancelledPromiseError_1 = __importDefault(require("./CancelledPromiseError"));
-var utils_1 = require("./utils");
+var _a;
+"use strict";
+// tslint:disable:max-classes-per-file
+exports.isCancelledPromiseError = function (err) {
+    return CancelledPromiseError.isCancelledPromiseError(err);
+};
+var errorSymbol = Symbol();
+var CancelledPromiseError = /** @class */ (function (_super) {
+    __extends(CancelledPromiseError, _super);
+    function CancelledPromiseError(message) {
+        if (message === void 0) { message = "Promise was cancelled"; }
+        var _this = _super.call(this, message) || this;
+        _this[_a] = true;
+        return _this;
+    }
+    CancelledPromiseError.isCancelledPromiseError = function (err) {
+        return err[errorSymbol] === true;
+    };
+    return CancelledPromiseError;
+}(Error));
+_a = errorSymbol;
 var CancelableEvents = /** @class */ (function () {
     function CancelableEvents() {
         var _this = this;
@@ -125,7 +151,7 @@ var CancelableEvents = /** @class */ (function () {
         var _this = this;
         this.assertIsDead();
         var cb = item[callableKey];
-        if (!utils_1.isFunction(cb)) {
+        if (!isFunction(cb)) {
             throw new Error("key " + callableKey + " is not a function but " + typeof item[callableKey]);
         }
         var cancel = function () {
@@ -204,7 +230,7 @@ var CancelableEvents = /** @class */ (function () {
                     case 1:
                         res = _a.sent();
                         if (isCanceled) {
-                            reject(new CancelledPromiseError_1.default());
+                            reject(new CancelledPromiseError());
                             return [2 /*return*/];
                         }
                         resolve(res);
@@ -225,6 +251,12 @@ var CancelableEvents = /** @class */ (function () {
             throw new Error("Can't add listener to cancelled instance");
         }
     };
+    CancelableEvents.isCancelledPromiseError = function (err) {
+        return CancelledPromiseError.isCancelledPromiseError(err);
+    };
     return CancelableEvents;
 }());
 exports.default = CancelableEvents;
+var isFunction = function (t) {
+    return "function" === typeof t;
+};
