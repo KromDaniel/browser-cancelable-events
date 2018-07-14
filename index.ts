@@ -122,7 +122,8 @@ export class CancelableEvents {
      * @param listener
      * Same as document.addEventListener
      */
-    public addDocumentListener<K extends keyof DocumentEventMap>(type: K, listener: (ev: DocumentEventMap[K]) => any) {
+    // tslint:disable-next-line:max-line-length
+    public addDocumentEventListener<K extends keyof DocumentEventMap>(type: K, listener: (ev: DocumentEventMap[K]) => any) {
         this.assertIsDead();
         const cb = (ev: DocumentEventMap[K]) => {
             return listener(ev);
