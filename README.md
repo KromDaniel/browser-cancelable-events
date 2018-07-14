@@ -20,13 +20,13 @@ Browser cancelable async events that invalidates them all once
 npm i --save browser-cancelable-events
 ```
 
-### Import
+#### Import
 
 ```javascript
 import { CancelableEvents, isCancelledPromiseError } from "browser-cancelable-events";
 ```
 
-### Require
+#### Require
 ```javascript
 const { CancelableEvents, isCancelledPromiseError } = require("browser-cancelable-events");
 ```
