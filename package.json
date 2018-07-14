@@ -1,0 +1,33 @@
+{
+  "name": "browser-cancelable-events",
+  "version": "1.0.0",
+  "description": "Browser cancelable async events",
+  "main": "dist/index.js",
+  "scripts": {
+    "test": "mocha ./tests/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/KromDaniel/browser-cancelable-events.git"
+  },
+  "keywords": [
+    "async",
+    "cancelable",
+    "cancelable-promise",
+    "cancelable-timers",
+    "cancelable-listeners",
+    "react",
+    "react-cancelable"
+  ],
+  "author": "Krom Daniel",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/KromDaniel/browser-cancelable-events/issues"
+  },
+  "homepage": "https://github.com/KromDaniel/browser-cancelable-events#readme",
+  "devDependencies": {
+    "@types/mocha": "^5.2.4",
+    "@types/node": "^10.5.2",
+    "mocha": "^5.2.0"
+  }
+}
