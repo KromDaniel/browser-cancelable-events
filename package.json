@@ -27,7 +27,6 @@
   "homepage": "https://github.com/KromDaniel/browser-cancelable-events#readme",
   "devDependencies": {
     "@types/mocha": "^5.2.4",
-    "@types/node": "^10.5.2",
     "mocha": "^5.2.0"
   }
 }
