@@ -142,11 +142,20 @@ timer.cancel();
 cancelable.setTimeout(callback, time, ...args[]) -> CancelableObject
 ```
 
-#### Interval
+### Interval
 ```javascript
 cancelable.setInterval(callback, time, ...args[]) -> CancelableObject
 ```
 
+### Promise
+```javascript
+cancelable.promise(functionThatReturnsPromise, ...args[]) -> Promise & CancelableObject
+```
+
+##### Promise example
+```javascript
+
+```
 ## Dependencies
 
 ## Testing
