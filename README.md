@@ -23,9 +23,104 @@ npm i --save browser-cancelable-events
 ### Import
 
 ```js
-import CancelableEvents, { isCancelledPromiseError } from 'browser-cancelable-events';
+import { CancelableEvents, isCancelledPromiseError } from "browser-cancelable-events";
 ```
 
+### Require
+```js
+const { CancelableEvents, isCancelledPromiseError } = require("browser-cancelable-events");
+```
+
+### Usage
+Usage example using react component
+
+```js
+import { Component } from 'react'
+import { CancelableEvents, isCancelledPromiseError } from "browser-cancelable-events";
+
+class MyComponent extends Component {
+    constructor(props) {
+        super(props);
+        this.cancelable = new CancelableEvents();
+    }
+
+    componentDidMount() {
+        this.cancelable.addWindowEventListener("resize", this.onWindowResize.bind(this));
+        this.cancelable.addDocumentEventListener("keydown", (e) => {
+            if (e.shiftKey) {
+                // shift clicked
+            }
+        });
+        this.updateEverySecond();
+        this.fetchDataFromApi();
+    }
+
+    // invalidate all events
+    componentWillUnmount() {
+        this.cancelable.cancelAll(); // this is the magic line
+    }
+
+    render() {
+        return (
+            <div> ... </div>
+        );
+    }
+
+    // interval that updates every second
+    updateEverySecond() {
+        this.cancelable.setInterval(() => {
+            this.setState({
+                counter: this.state.counter + 1,
+            })
+        }, 1000);
+    }
+
+    // do task with timeout
+    doSomeAnimation() {
+        this.setState({
+            isInAnimation: true,
+        }, () => {
+            this.cancelable.setTimeout(() => {
+                this.setState({
+                    isInAnimation: false,
+                });
+            }, 500);
+        })
+    }
+
+    // use invalidated promise
+    async fetchDataFromApi() {
+        try {
+            const apiResult = await this.cancelable.promise(() => {
+                return APIService.fetchSomeData();
+            });
+
+            const someVeryLongPromise = this.cancelable.promise(() => {
+                return APIService.fetchSomeReallyLongTask();
+            });
+
+            this.cancelable.setTimeout(() => {
+                // 1 second is too much, let's cancel
+                someVeryLongPromise.cancel();
+            }, 1000);
+
+            await someVeryLongPromise;
+        } catch (err) {
+            if (isCancelledPromiseError(err)) {
+                // all good, component is not mounted or promise is cancelled
+                return;
+            }
+
+            // it's real error, should handle
+        }
+    }
+
+    // callback for window.addEventListener
+    onWindowResize(e) {
+        // do something with resize event
+    }
+}
+```
 ## API
 
 
