@@ -2,7 +2,7 @@ export declare const isCancelledPromiseError: (err: Error) => boolean;
 export interface ICancelablePromise<T> extends Promise<T> {
     cancel: () => void;
 }
-export default class CancelableEvents {
+export declare class CancelableEvents {
     static isCancelledPromiseError: (err: Error) => boolean;
     private isDead;
     private timeouts;

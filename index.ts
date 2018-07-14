@@ -19,7 +19,7 @@ class CancelledPromiseError extends Error {
     }
 }
 
-export default class CancelableEvents {
+export class CancelableEvents {
     public static isCancelledPromiseError = (err: Error) => {
         return CancelledPromiseError.isCancelledPromiseError(err);
     }

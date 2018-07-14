@@ -256,7 +256,7 @@ var CancelableEvents = /** @class */ (function () {
     };
     return CancelableEvents;
 }());
-exports.default = CancelableEvents;
+exports.CancelableEvents = CancelableEvents;
 var isFunction = function (t) {
     return "function" === typeof t;
 };
