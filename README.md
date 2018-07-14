@@ -22,19 +22,19 @@ npm i --save browser-cancelable-events
 
 ### Import
 
-```js
+```javascript
 import { CancelableEvents, isCancelledPromiseError } from "browser-cancelable-events";
 ```
 
 ### Require
-```js
+```javascript
 const { CancelableEvents, isCancelledPromiseError } = require("browser-cancelable-events");
 ```
 
 ### Usage
 Usage example using react component
 
-```js
+```javascript
 import { Component } from 'react'
 import { CancelableEvents, isCancelledPromiseError } from "browser-cancelable-events";
 
@@ -123,6 +123,29 @@ class MyComponent extends Component {
 ```
 ## API
 
+### Cancelable object
+Each one of the cancelable methods returns object with cancel method
+
+```javascript
+{
+    cancel: Function
+}
+```
+
+```javascript
+const timer = cancelable.setInterval(intervalCallback, 100);
+timer.cancel();
+```
+
+### Timeout
+```javascript
+cancelable.setTimeout(callback, time, ...args[]) -> CancelableObject
+```
+
+#### Interval
+```javascript
+cancelable.setInterval(callback, time, ...args[]) -> CancelableObject
+```
 
 ## Dependencies
 
