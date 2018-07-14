@@ -2,7 +2,8 @@
   "name": "browser-cancelable-events",
   "version": "1.0.0",
   "description": "Browser cancelable async events",
-  "main": "index.js",
+  "main": "./index.js",
+  "types": "./index.d.ts",
   "scripts": {
     "test": "mocha ./tests/index.js"
   },
