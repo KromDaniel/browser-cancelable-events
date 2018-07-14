@@ -92,7 +92,7 @@ var CancelableEvents = /** @class */ (function () {
             args[_i - 2] = arguments[_i];
         }
         this.assertIsDead();
-        var timeoutId = window.setTimeout(this.onTimeoutCB, timeout, handler);
+        var timeoutId = setTimeout(this.onTimeoutCB, timeout, handler);
         this.timeouts.add(timeoutId);
         var cancel = this.createCancelTimeoutCB(timeoutId);
         return { cancel: cancel };
@@ -111,8 +111,8 @@ var CancelableEvents = /** @class */ (function () {
             args[_i - 2] = arguments[_i];
         }
         this.assertIsDead();
-        var intervalId = window.setInterval.apply(window, [handler, timer].concat(args));
-        this.intervals.add(intervalId);
+        var intervalId = setInterval.apply(void 0, [handler, timer].concat(args));
+        this.intervals.add(intervalId); // avoid nodeJs.timer and window.
         var cancel = this.createCancelIntervalCb(intervalId);
         return { cancel: cancel };
     };

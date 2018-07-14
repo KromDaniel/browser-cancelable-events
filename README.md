@@ -22,11 +22,8 @@ npm i --save browser-cancelable-events
 
 ### Import
 
-```javascript
-import "github.com/KromDaniel/rejonson"
-```
-
-*The examples are using [jonson](https://github.com/KromDaniel/jonson) library which is optional (but recommended)*
+```js
+import CancelableEvents, { isCancelledPromiseError } from 'browser-cancelable-events';
 ```
 
 ## API

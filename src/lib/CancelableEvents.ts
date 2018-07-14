@@ -35,7 +35,7 @@ export default class CancelableEvents {
      */
     public setTimeout(handler: (...args: any[]) => void, timeout: number = 0, ...args: any[]) {
         this.assertIsDead();
-        const timeoutId = window.setTimeout(this.onTimeoutCB, timeout, handler);
+        const timeoutId: number = setTimeout(this.onTimeoutCB, timeout, handler) as any;
         this.timeouts.add(timeoutId);
         const cancel = this.createCancelTimeoutCB(timeoutId);
         return { cancel };
@@ -50,8 +50,8 @@ export default class CancelableEvents {
      */
     public setInterval(handler: (...args: any[]) => void, timer: number = 0, ...args: any[]) {
         this.assertIsDead();
-        const intervalId = window.setInterval(handler, timer, ...args);
-        this.intervals.add(intervalId);
+        const intervalId: number = setInterval(handler, timer, ...args) as any;
+        this.intervals.add(intervalId); // avoid nodeJs.timer and window.
         const cancel = this.createCancelIntervalCb(intervalId);
         return { cancel };
     }
