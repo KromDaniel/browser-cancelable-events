@@ -4,6 +4,10 @@ export const isCancelledPromiseError = (err: Error) => {
     return CancelledPromiseError.isCancelledPromiseError(err);
 };
 
+const isPromise = (p: any): p is Promise<any> => {
+    return p instanceof Promise;
+};
+
 export interface ICancelablePromise<T> extends Promise<T> {
     cancel: () => void;
 }
@@ -144,7 +148,7 @@ export class CancelableEvents {
      * @param args
      * Add promise, handler should actually return a promise
      */
-    public promise<T>(handler: (...args: any[]) => Promise<T>, ...args: any[]): ICancelablePromise<T> {
+    public promise<T>(handler: ((...args: any[]) => Promise<T>) | Promise<T>, ...args: any[]): ICancelablePromise<T> {
         this.assertIsDead();
         let isCanceled = false;
         const cancel = () => {
@@ -154,7 +158,7 @@ export class CancelableEvents {
         this.cancelableEvents.add(cancel);
         const promise = new Promise<T>(async (resolve, reject) => {
             try {
-                const res: T = await handler(...args);
+                const res: T = await (isPromise(handler) ? handler : handler(...args));
                 if (isCanceled) {
                     reject(new CancelledPromiseError());
                     return;

@@ -56,7 +56,7 @@ export declare class CancelableEvents {
      * @param listener
      * Same as document.addEventListener
      */
-    addDocumentListener<K extends keyof DocumentEventMap>(type: K, listener: (ev: DocumentEventMap[K]) => any): {
+    addDocumentEventListener<K extends keyof DocumentEventMap>(type: K, listener: (ev: DocumentEventMap[K]) => any): {
         cancel: () => void;
     };
     /**
@@ -65,7 +65,7 @@ export declare class CancelableEvents {
      * @param args
      * Add promise, handler should actually return a promise
      */
-    promise<T>(handler: (...args: any[]) => Promise<T>, ...args: any[]): ICancelablePromise<T>;
+    promise<T>(handler: ((...args: any[]) => Promise<T>) | Promise<T>, ...args: any[]): ICancelablePromise<T>;
     private onTimeoutCB;
     private createCancelTimeoutCB;
     private createCancelIntervalCb;

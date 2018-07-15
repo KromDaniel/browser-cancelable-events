@@ -8,13 +8,8 @@ const assert = require("assert");
 const {
     promisify
 } = require("util");
-const cancelable = require("../index");
+const { CancelableEvents, isCancelledPromiseError } = require("../index");
 const setTimeoutPromise = promisify(setTimeout);
-
-const CancelableEvents = cancelable.default;
-const {
-    isCancelledPromiseError
-} = cancelable;
 
 describe("basic tests on promise", function () {
     it("should throw cancelled promise using cancelable.cancelAll()", function (done) {
@@ -47,6 +42,12 @@ describe("basic tests on promise", function () {
             });
         });
         promise.then(done, done);
+    });
+
+    it("should accept Promise instance and resolve", function(done){
+        const cancelable = new CancelableEvents();
+        cancelable.promise(setTimeoutPromise(100)).then(done, done);
+        
     });
 
     it("should resolve before timeout using cancelable.cancelAll()", function (done) {

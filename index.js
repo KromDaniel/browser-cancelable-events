@@ -51,6 +51,9 @@ var _a;
 exports.isCancelledPromiseError = function (err) {
     return CancelledPromiseError.isCancelledPromiseError(err);
 };
+var isPromise = function (p) {
+    return p instanceof Promise;
+};
 var errorSymbol = Symbol();
 var CancelledPromiseError = /** @class */ (function (_super) {
     __extends(CancelledPromiseError, _super);
@@ -187,7 +190,8 @@ var CancelableEvents = /** @class */ (function () {
      * @param listener
      * Same as document.addEventListener
      */
-    CancelableEvents.prototype.addDocumentListener = function (type, listener) {
+    // tslint:disable-next-line:max-line-length
+    CancelableEvents.prototype.addDocumentEventListener = function (type, listener) {
         var _this = this;
         this.assertIsDead();
         var cb = function (ev) {
@@ -226,7 +230,7 @@ var CancelableEvents = /** @class */ (function () {
                 switch (_a.label) {
                     case 0:
                         _a.trys.push([0, 2, , 3]);
-                        return [4 /*yield*/, handler.apply(void 0, args)];
+                        return [4 /*yield*/, (isPromise(handler) ? handler : handler.apply(void 0, args))];
                     case 1:
                         res = _a.sent();
                         if (isCanceled) {
