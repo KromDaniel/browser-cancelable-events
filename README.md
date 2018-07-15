@@ -1,6 +1,12 @@
-# browser-cancelable-events
+# Browser Cancelable Events
 
-Browser cancelable async events that invalidates them all once
+Automatically invalidate async listeners and promises in one place.</br>
+Lightweight zero dependent library for browsers.
+
+## Motivation
+
+Libraries like react, should invalidate all async tasks once component is unmounted,
+using `isMounted` is anti pattern.
 
 ## Table of Contents
 
@@ -220,6 +226,21 @@ cancelable.cancelAll();
 
 ### Custom event emitter
 
+You can use custom event emitter with cancelable events.
+
+```javascript
+cancelable.addCustomCancelable(subscription, removeKey) -> CancelableObject
+```
+
+##### Custom event emitter example
+
+```javascript
+const { EventEmitter } = require("fbemitter");
+
+const emitter = new EventEmitter();
+// key "remove" because emitter.addListener(...).remove()
+cancelable.addCustomCancelable(emitter.addListener("myCustomEvent", callback), "remove");
+```
 ## Testing
 ```shell
 npm run tests
