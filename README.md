@@ -3,7 +3,7 @@
 Automatically invalidate async listeners and promises in one place.</br>
 Lightweight zero dependent library for browsers.
 
-#### Motivation
+### Motivation
 
 Libraries like React, should invalidate all async tasks once component is unmounted,
 using `isMounted` is anti pattern.
