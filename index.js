@@ -158,7 +158,7 @@ var CancelableEvents = /** @class */ (function () {
             throw new Error("key " + callableKey + " is not a function but " + typeof item[callableKey]);
         }
         var cancel = function () {
-            cb();
+            cb.call(item);
             _this.cancelableEvents.delete(cancel);
         };
         this.cancelableEvents.add(cancel);
