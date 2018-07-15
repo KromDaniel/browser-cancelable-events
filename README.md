@@ -145,6 +145,14 @@ const timer = cancelable.setInterval(intervalCallback, 100);
 timer.cancel();
 ```
 
+### Cancel All
+
+Cancel all listeners method, invalidated everything immediately. **Adding new listeners on cancelled event will throw exception**
+
+```javascript
+cancelable.cancelAll();
+```
+
 ### Timeout
 
 ```javascript
