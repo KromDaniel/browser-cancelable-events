@@ -151,14 +151,28 @@ export class CancelableEvents {
     public promise<T>(handler: ((...args: any[]) => Promise<T>) | Promise<T>, ...args: any[]): ICancelablePromise<T> {
         this.assertIsDead();
         let isCanceled = false;
+        let isFulfilled = false;
+        // tslint:disable-next-line:variable-name
+        let _reject: (err: Error) => void;
         const cancel = () => {
             isCanceled = true;
             this.cancelableEvents.delete(cancel);
+
+            if (!isFulfilled && _reject) {
+                isFulfilled = true;
+                _reject(new CancelledPromiseError());
+            }
         };
         this.cancelableEvents.add(cancel);
+
         const promise = new Promise<T>(async (resolve, reject) => {
+            _reject = reject;
             try {
                 const res: T = await (isPromise(handler) ? handler : handler(...args));
+                if (isFulfilled) {
+                    return;
+                }
+                // basically, this line should never happen...
                 if (isCanceled) {
                     reject(new CancelledPromiseError());
                     return;
@@ -167,6 +181,8 @@ export class CancelableEvents {
 
             } catch (err) {
                 reject(err);
+            } finally {
+                isFulfilled = true;
             }
         });
         (promise as ICancelablePromise<T>).cancel = cancel;

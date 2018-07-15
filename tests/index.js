@@ -8,10 +8,21 @@ const assert = require("assert");
 const {
     promisify
 } = require("util");
-const { CancelableEvents, isCancelledPromiseError } = require("../index");
+const {
+    CancelableEvents,
+    isCancelledPromiseError
+} = require("../index");
 const setTimeoutPromise = promisify(setTimeout);
 
-describe("basic tests on promise", function () {
+describe("check error is isCancelledPromiseError", function () {
+    it("should not recognize errors as cancelled promise error", function () {
+        assert.equal(isCancelledPromiseError(new Error()), false);
+        const error = new Error();
+        error[Symbol()] = true;
+        assert.equal(isCancelledPromiseError(error), false);
+    });
+})
+describe("basic tests", function () {
     it("should throw cancelled promise using cancelable.cancelAll()", function (done) {
         const cancelable = new CancelableEvents();
         const promise = cancelable.promise(() => setTimeoutPromise(50));
@@ -34,6 +45,26 @@ describe("basic tests on promise", function () {
         promise.cancel();
     });
 
+    it("should invoke cancel immediately", function () {
+        const cancelable = new CancelableEvents();
+        let isFlaggedByPromise = false;
+        const promise = cancelable.promise(new Promise(async (resolve, reject) => {
+            await setTimeoutPromise(0);
+            isFlaggedByPromise = true;
+        }));
+
+        const chained = promise.then(() => {
+            throw new Error("shouldn't resolve");
+        }).catch((err) => {
+            assert.equal(isCancelledPromiseError(err), true);
+            assert.equal(isFlaggedByPromise, false);
+        });
+
+        promise.cancel();
+
+        return chained;
+    })
+
     it("should just resolve", function (done) {
         const cancelable = new CancelableEvents();
         const promise = cancelable.promise(() => {
@@ -44,10 +75,9 @@ describe("basic tests on promise", function () {
         promise.then(done, done);
     });
 
-    it("should accept Promise instance and resolve", function(done){
+    it("should accept Promise instance and resolve", function (done) {
         const cancelable = new CancelableEvents();
         cancelable.promise(setTimeoutPromise(100)).then(done, done);
-        
     });
 
     it("should resolve before timeout using cancelable.cancelAll()", function (done) {

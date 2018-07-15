@@ -219,9 +219,16 @@ var CancelableEvents = /** @class */ (function () {
         }
         this.assertIsDead();
         var isCanceled = false;
+        var isFulfilled = false;
+        // tslint:disable-next-line:variable-name
+        var _reject;
         var cancel = function () {
             isCanceled = true;
             _this.cancelableEvents.delete(cancel);
+            if (!isFulfilled && _reject) {
+                isFulfilled = true;
+                _reject(new CancelledPromiseError());
+            }
         };
         this.cancelableEvents.add(cancel);
         var promise = new Promise(function (resolve, reject) { return __awaiter(_this, void 0, void 0, function () {
@@ -229,21 +236,31 @@ var CancelableEvents = /** @class */ (function () {
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
-                        _a.trys.push([0, 2, , 3]);
-                        return [4 /*yield*/, (isPromise(handler) ? handler : handler.apply(void 0, args))];
+                        _reject = reject;
+                        _a.label = 1;
                     case 1:
+                        _a.trys.push([1, 3, 4, 5]);
+                        return [4 /*yield*/, (isPromise(handler) ? handler : handler.apply(void 0, args))];
+                    case 2:
                         res = _a.sent();
+                        if (isFulfilled) {
+                            return [2 /*return*/];
+                        }
+                        // basically, this line should never happen...
                         if (isCanceled) {
                             reject(new CancelledPromiseError());
                             return [2 /*return*/];
                         }
                         resolve(res);
-                        return [3 /*break*/, 3];
-                    case 2:
+                        return [3 /*break*/, 5];
+                    case 3:
                         err_1 = _a.sent();
                         reject(err_1);
-                        return [3 /*break*/, 3];
-                    case 3: return [2 /*return*/];
+                        return [3 /*break*/, 5];
+                    case 4:
+                        isFulfilled = true;
+                        return [7 /*endfinally*/];
+                    case 5: return [2 /*return*/];
                 }
             });
         }); });
