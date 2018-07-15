@@ -89,7 +89,7 @@ export class CancelableEvents {
             throw new Error(`key ${callableKey} is not a function but ${typeof item[callableKey]}`);
         }
         const cancel = () => {
-            cb();
+            cb.call(item);
             this.cancelableEvents.delete(cancel);
         };
 

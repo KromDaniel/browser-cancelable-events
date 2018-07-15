@@ -6,10 +6,8 @@ Browser cancelable async events that invalidates them all once
 
 1. [Quick start](#install)
 2. [API](#api)
-3. [Dependencies](#dependencies)
-4. [Testing](#testing)
-5. [License](#license)
-6. [Contact](#contact)
+3. [Testing](#testing)
+4. [License](#license)
  
 
 ## Quick start
@@ -124,6 +122,7 @@ class MyComponent extends Component {
 ## API
 
 ### Cancelable object
+
 Each one of the cancelable methods returns object with cancel method
 
 ```javascript
@@ -138,27 +137,92 @@ timer.cancel();
 ```
 
 ### Timeout
+
 ```javascript
 cancelable.setTimeout(callback, time, ...args[]) -> CancelableObject
 ```
 
 ### Interval
+
 ```javascript
 cancelable.setInterval(callback, time, ...args[]) -> CancelableObject
 ```
 
 ### Promise
+
 ```javascript
 cancelable.promise(functionThatReturnsPromise, ...args[]) -> Promise & CancelableObject
+cancelable.promise(promise) -> Promise<T> & CancelableObject
 ```
 
 ##### Promise example
-```javascript
 
+```javascript
+const cancelable = new CancelableEvents();
+
+cancelable.promise(new Promise((resolve, reject) => {
+    resolve("foo");
+})).then((res) => {
+    console.log(res); // foo
+});
+
+let cancelTimer;
+// invalidate promise after 1 second
+const promise = cancelable.promise(() => API.fetchSomeLongData());
+
+promise.then((data) => {
+    if(cancelTimer){
+        cancelTimer.cancel();
+    }
+}).catch((err) => {
+    if(isCancelledPromiseError(err)){
+        // timeout, took too long
+        return;
+    };
+    // real error
+});
+
+// if promise.cancel() called after fulfilled, nothing will happen
+cancelTimer = cancelable.setTimeout(() => {
+    promise.cancel();
+}, 1000);
 ```
-## Dependencies
+
+### Document event listener
+
+Observes `document.addEventListener` 
+```javascript
+cancelable.addDocumentEventListener(eventKey, callback) -> CancelableObject
+```
+
+### Window event listener
+
+Observes `window.addEventListener` 
+```javascript
+cancelable.addWindowEventListener(eventKey, callback) -> CancelableObject
+```
+
+##### Event listeners example
+
+```javascript
+const cancelable = new CancelableEvents();
+
+cancelable.addDocumentEventListener("mousewheel", (e) => {
+   // do something with event 
+});
+cancelable.addWindowEventListener("submit", (e) => {
+    // do something with event
+});
+
+// remove all cancelable listeners
+cancelable.cancelAll();
+```
+
+### Custom event emitter
 
 ## Testing
-
+```shell
+npm run tests
+```
 ## License
 MIT
