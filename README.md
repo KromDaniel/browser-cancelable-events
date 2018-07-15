@@ -24,6 +24,9 @@ using `isMounted` is anti pattern.
 npm i --save browser-cancelable-events
 ```
 
+### Typescript
+The project is written with typescript and comes with a built-in `index.d.ts`
+
 #### Import
 
 ```javascript
